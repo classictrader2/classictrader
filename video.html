@@ -1,0 +1,122 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="loader.css">
+<link rel="stylesheet" href="style.css">
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body, html {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+  }
+  #shortsContainer {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    display: none;
+  }
+  .short {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: none;
+  }
+  .short.active {
+    display: block;
+  }
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    object-fit: cover;
+  }
+  #controls {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 10;
+  }
+  #controls button {
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  #controls button:hover {
+    background: rgba(255,255,255,0.3);
+  }
+  @media only screen and (min-width: 768px) {
+    #loader { top: 25%; width: 100%; }
+  }
+</style>
+
+<div id="loader" style="display: flex;"><div class="loader"></div></div>
+<div id="shortsContainer"></div>
+<div id="controls">
+  <button onclick="scrollUp()">⬆️</button>
+  <button onclick="scrollDown()">⬇️</button>
+</div>
+
+<script>
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbzB_9lyKy0l5kggEVxN0su6lZL5X0VyPOXqCBv-ZwAx3sOcXtfHs4ijM8beSoZbxqoZgA/exec';
+  const container = document.getElementById('shortsContainer');
+  const loader = document.getElementById('loader');
+  let index = 0;
+  let videos = [];
+
+  fetch(`${scriptURL}?action=getVideos`)
+    .then(res => res.json())
+    .then(data => {
+      videos = data.videos.sort(() => 0.5 - Math.random());
+
+      videos.forEach((id, i) => {
+        const div = document.createElement('div');
+        div.className = 'short' + (i === 0 ? ' active' : '');
+        div.innerHTML = `
+          <iframe 
+            src="https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&controls=0&playlist=${id}" 
+            allow="autoplay; fullscreen" allowfullscreen>
+          </iframe>
+        `;
+        container.appendChild(div);
+      });
+
+      loader.style.display = 'none';
+      container.style.display = 'block';
+    });
+
+  function scrollUp() {
+    if (index > 0) {
+      changeShort(index - 1);
+    }
+  }
+
+  function scrollDown() {
+    if (index < videos.length - 1) {
+      changeShort(index + 1);
+    }
+  }
+
+  function changeShort(newIndex) {
+    const allShorts = document.querySelectorAll('.short');
+    allShorts[index].classList.remove('active');
+    allShorts[newIndex].classList.add('active');
+    index = newIndex;
+  }
+</script>

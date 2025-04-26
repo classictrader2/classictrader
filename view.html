@@ -1,0 +1,50 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="loader.css">
+<script src="https://kit.fontawesome.com/8aa17a250d.js" crossorigin="anonymous"></script>
+<style>
+  .header { padding: 10px; text-align: center; }
+  .context { display: flex; flex-direction: column; }
+  .play { width: 40px; height: 40px; background: #382fe3; color: #fff; font-size: 20px; display: flex; align-items: center; justify-content: center; border-radius: 125px; border: none; }
+  i { overflow: hidden; }
+  #content > div { display: flex; align-items: center; justify-content: space-between; padding: 10px; margin: 0 10px; border-bottom: 1px solid; }
+  #content > div { background: #047a7e; border-radius: 8px; padding: 10px 20px; border-bottom: none; }
+  #content { display: flex; flex-direction: column; gap: 15px; color: #fff; margin: 20px 0 0 0; }
+  @media only screen and (min-width: 768px) {
+    body { margin: 0 25%; background: #073042; color: #fff; } 
+    #loader { top: 25%; }
+    #content { display: flex; flex-direction: column; gap: 15px; }
+    #content > div { background: #047a7e; border-radius: 8px; padding: 10px 20px; border-bottom: none; }
+  }
+</style>
+<div class="header">
+  <h2>Chapters</h2>
+</div>
+<div id="loader" style="display: flex;"><div class="loader"></div></div>
+<div id="content"></div>
+<script>
+const scriptURL = 'https://script.google.com/macros/s/AKfycbyne-nyOj77Qr9vksG7y_nQPnd0Zz6c1wEQmYZbcyL63ldPq3W9UPN0zn9DukKrJkDDKw/exec';
+const key = localStorage.getItem('secret');
+if (!key) window.location.href = 'login.html';
+
+document.getElementById('loader').style.display = 'flex';
+
+fetch(`${scriptURL}?action=view&key=${key}`)
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById('loader').style.display = 'none';
+    const contentDiv = document.getElementById('content');
+    data.forEach(item => {
+      const card = document.createElement('div');
+      card.innerHTML = `
+      <div class="context">
+        <h3>${item.title}</h3>
+        <p>${item.description}</p>
+      </div>
+        <button onclick="window.location.href='${item.url}'" class="play"><i class="fa-solid fa-play"></i></button>
+      `;
+      contentDiv.appendChild(card);
+    });
+  });
+</script>

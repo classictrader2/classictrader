@@ -1,0 +1,78 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="loader.css">
+<style>
+#slider { display: flex; overflow-x: auto !important; gap: 10px; padding: 10px; scroll-behavior: smooth; }
+#slider img { width: 320px; height: 180px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
+#title , #price { margin: 0 0 0 10px; }
+#aboutDiv , #descriptionDiv { margin: 10px; }
+#buttons { display: flex; justify-content: space-around; }
+#buttons > button { color: #333; padding: 6px; width: 140px; border: none; background: none; border-bottom: 2px solid; text-transform: uppercase; font-size: 18px; font-weight: 500; }
+#buttons .active { border-bottom: 2px solid #382fe3; }
+#actions > button { position: fixed; bottom: 0; border-radius: 12px 12px 0 0; text-transform: uppercase; padding: 15px; width: 100%; box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; font-size: 19px; background: #d92569; color: #fff; font-weight: 600; border: none; }
+@media only screen and (min-width: 768px) {
+  body { margin: 0 25%; background: #073042; color: #fff; }
+  #loader { top: 25%; }
+  #slider { margin: 20px 0 0 0; }
+  #actions > button { width: 45%; }
+  #buttons > button { color: #fff; }
+}
+</style>
+
+<div id="loader" style="display:flex;"><div class="loader"></div></div>
+<div id="slider"></div>
+<h2 id="title"></h2>
+<h3 id="price"></h3>
+<div id="buttons" style="display:none;">
+  <button id="aboutBtn" class="active" onclick="showAbout()">About</button>
+  <button id="descBtn" onclick="showDescription()">Description</button>
+</div>
+<div id="aboutDiv"></div>
+<div id="descriptionDiv" style="display:none;"></div>
+<div id="actions"></div>
+
+<script>
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbzQIqwFGjE--_pk6fOyfJ7ksqtpfTRrJylMb6iSffxWylj2QI1oXXVyW7qCqZxQ_VeP/exec';
+  const key = localStorage.getItem('secret');
+  const email = localStorage.getItem('c_local');
+  if (!key || !email) window.location.href = 'index.html';
+
+  function showAbout() {
+    document.getElementById('aboutDiv').style.display = 'block';
+    document.getElementById('descriptionDiv').style.display = 'none';
+    document.getElementById('aboutBtn').classList.add('active');
+    document.getElementById('descBtn').classList.remove('active');
+  }
+
+  function showDescription() {
+    document.getElementById('aboutDiv').style.display = 'none';
+    document.getElementById('descriptionDiv').style.display = 'block';
+    document.getElementById('descBtn').classList.add('active');
+    document.getElementById('aboutBtn').classList.remove('active');
+  }
+
+  fetch(`${scriptURL}?action=main&key=${encodeURIComponent(key)}&email=${encodeURIComponent(email)}`)
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById('loader').style.display = 'none';
+      document.getElementById('buttons').style.display = 'flex';
+      const slider = document.getElementById('slider');
+      const images = data.images.split(',');
+      images.forEach(img => {
+        const image = document.createElement('img');
+        image.src = img.trim();
+        slider.appendChild(image);
+      });
+      document.getElementById('aboutDiv').innerHTML = `<h3>About</h3><span class="tought">${data.about}</span>`;
+      document.getElementById('descriptionDiv').innerHTML = `<h3>Description</h3><span class="tought">${data.description}</span>`;
+      document.getElementById('title').innerText = data.title;
+      document.getElementById('price').innerText = `At Just ₹${data.price}`;
+
+      const actions = document.getElementById('actions');
+      const btn = document.createElement('button');
+      btn.textContent = data.ownsCourse ? '👀 Watch' : '🛍️ Grab Now';
+      btn.onclick = () => window.location.href = data.ownsCourse ? 'view.html' : 'buy.html';
+      actions.appendChild(btn);
+    });
+</script>

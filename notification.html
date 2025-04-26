@@ -1,0 +1,56 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="loader.css">
+<style>
+  .notification p { cursor: pointer; overflow: hidden; text-overflow: ellipsis; display: -webkit-box;  -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .expanded { -webkit-line-clamp: unset !important; }
+  .header { text-align: center; color: #fff; padding: 10px 10px 50px 10px; }
+  #container { background: #fff; margin: -25px 0 0 0; border-radius: 25px; padding:  15px 10px; display: flex; flex-direction: column; gap: 15px; }
+  .notification { padding: 10px; background: #eee; border-radius: 8px; }
+  .notification > h3 { font-size: 22px; font-weight: 600; }
+  .notification > p { font-size: 18px; }
+  @media only screen and (min-width: 768px) {
+    body { margin: 0 25%; background: #073042; }
+    #loader { width: 50%; top: 25%; }
+  }
+</style>
+<div id="loader" style="display: flex;"><div class="loader"></div></div>
+<div class="header">
+  <h2>Notifications</h2>
+</div>
+<div id="container"></div>
+<script>
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbyG7eZSZBJFUhukXexgSFs0CabwgcsJubtxtwHC_f3Q6BYpVbecMr0eaB0dHdipPkZjcQ/exec';
+
+  fetch(`${scriptURL}?action=getNotifications`)
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById("loader").style.display = "none";
+      const container = document.getElementById("container");
+      data.notifications.forEach((item, index) => {
+        const card = document.createElement("div");
+        card.className = "notification";
+        const title = document.createElement("h3");
+        title.textContent = item[0];
+        const message = document.createElement("p");
+        message.textContent = item[1];
+        message.dataset.index = index;
+        message.onclick = () => toggleMessage(index);
+        card.appendChild(title);
+        card.appendChild(message);
+        container.appendChild(card);
+      });
+    });
+
+  function toggleMessage(currentIndex) {
+    const allMessages = document.querySelectorAll(".notification p");
+    allMessages.forEach((msg, i) => {
+      if (parseInt(msg.dataset.index) === currentIndex) {
+        msg.classList.toggle("expanded");
+      } else {
+        msg.classList.remove("expanded");
+      }
+    });
+  }
+</script>

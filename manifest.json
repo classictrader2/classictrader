@@ -1,0 +1,21 @@
+{
+  "name": "Classic Trader",
+  "short_name": "Classic Trader",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#073042",
+  "theme_color": "#073042",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://i.ibb.co/qMg94hmC/icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://i.ibb.co/qMg94hmC/icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

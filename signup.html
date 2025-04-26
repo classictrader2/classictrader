@@ -1,0 +1,64 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="loader.css">
+<style>
+  @media only screen and (min-width: 768px) {
+    body { margin: 0 25%; background: #073042; }
+    .image { margin: 0 0 10px 0; }
+    .image > img { cursor: pointer; }
+    .dont > a { color: #fff; }
+  }
+</style>
+<div class="header">
+  <div class="image">
+    <img src="https://i.ibb.co/yB091WM6/a2.png">
+  </div>
+</div>
+<form id="userForm" class="form">
+  <div class="head">
+    <h2>Sign Up</h2>
+    <h3>To Grow!</h3>
+  </div>
+  <input type="text" name="name" placeholder="Name" required class="int" />
+  <input type="email" name="email" required placeholder="Email" class="int" />
+  <input type="number" name="mobile" required placeholder="Mobile Number" class="int"/>
+  <input type="password" name="password" placeholder="Password" required class="int" />
+  <button type="submit" class="btn">SIGN UP</button>
+</form>
+<div class="dont">
+  <p>Already Have Account?</p>
+  <a href="login.html">Sign In</a>
+</div>
+<div id="loader" style="display:none;"><div class="loader"></div></div>
+<script>
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbwUZykZyOiM42zNjmM3r37lwROENSl3oM3zyksaYeUAb4YQ7JWucOJLpj6_kAFeHtwxNA/exec';
+
+  if (localStorage.getItem('c_local')) {
+    window.location.href = "index.html";
+  }
+
+  document.getElementById('userForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    document.getElementById('loader').style.display = 'flex';
+
+    const formData = new FormData(this);
+    const email = formData.get('email');
+
+    fetch(scriptURL, { method: 'POST', body: formData })
+      .then(response => response.text())
+      .then(responseText => {
+        if (responseText === "exists") {
+          alert("Email already registered");
+          document.getElementById('loader').style.display = 'none';
+        } else {
+          localStorage.setItem('c_local', email);
+          window.location.href = "index.html";
+        }
+      })
+      .catch(error => {
+        alert('Submission failed');
+        document.getElementById('loader').style.display = 'none';
+      });
+  });
+</script>

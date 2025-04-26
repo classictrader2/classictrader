@@ -1,0 +1,191 @@
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#073042">
+<meta name="apple-mobile-web-app-title" content="DouchUp">
+<link rel="apple-touch-icon" href="https://i.ibb.co/qMg94hmC/icon.png">
+<meta name="theme-color" content="#073042">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="loader.css">
+<script src="https://kit.fontawesome.com/8aa17a250d.js" crossorigin="anonymous"></script>
+
+<style>
+  #username { margin: 10px;  }
+  #slider-container { display: flex; align-items: center; justify-content: center; flex-direction: column; }
+  #slider-container > img { border-radius: 12px; }
+  #dots { margin: 20px 0 40px 0; }
+  #cards { border-radius: 25px; background: #fff; margin: -25px 0 0 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; padding: 10px 10px 30% 10px; }
+  #cards .text { width: 100%; text-align: center; }
+  #cards div:not(.text) { width: calc(100% - 8px); background: #00496d; border-radius: 12px; overflow: hidden; box-shadow: rgba(0, 0, 0, 0.24) 0px 10px 18px; cursor: pointer; transition: transform 0.2s ease; }
+  #cards div:not(.text):hover { transform: scale(1.02); }
+  #cards div:not(.text) img { box-shadow: rgba(0, 0, 0, 0.24) 0px 10px 18px; width: 100%; border-radius: 0 0 25px 25px; height: 180px; object-fit: cover; display: block; }
+  #cards div:not(.text) h4 { font-size: 18px; margin: 10px 0 5px; font-weight: 700; text-shadow: 10px #333; color: #fff; margin: 10px 0 0 10px; }
+  #cards div:not(.text) p { margin-bottom: 10px; font-size: 20px; text-shadow: 10px #333; font-weight: 800; color: #fff; margin: 5px 0 10px 10px; }
+  .footer { background: #047a7e; position: fixed; cursor: pointer; display: flex; align-items: center; width: 100%; bottom: 0; justify-content: space-around; padding: 20px 0; box-shadow: rgba(0, 0, 0, 0.24) 0px 10px 18px; border-radius: 25px 25px 0 0; }
+  .foot-item > i  { font-size: 24px; color: #fff; cursor: pointer; }
+  .home { position: fixed; padding: 15px; cursor: pointer; background: #00496d; border-radius: 125px; border: 8px solid #047a7e; bottom: 4%; }
+  .home > i { font-size: 25px; color: #fff; cursor: pointer; }
+  .bell { position: fixed; right: 20px; top: 15px; background: #047a7e; padding: 10px; border-radius: 125px; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; }
+  .bell > i { font-size: 26px; color: #fff; }
+  #slider-image { cursor: pointer; }
+  @media only screen and (max-width: 600px) {
+    .main-link { display: none; }
+    #slider-image { width: 280px; }
+  }
+  @media only screen and (min-width: 768px) {
+    body { background: #073042; }
+    #loader { width: 100%; top: 25%; }
+    .footer { display: none; }
+    #slider-image { width: 400px; }
+    #mainContent { margin: 0 15%; background: #073042; }
+    .bell { right: 15%; top: 20px; }
+    #cards div:not(.text) { width: calc(48% - 8px); } 
+    #cards div:not(.text) img { height: auto; }
+    #cards div:not(.text) h4 { text-align: center; }
+    #cards { padding: 10px; margin: 10px 10px 20px 10px; }
+    .main-link > a { color: #fff; font-weight: 600; }
+    .main-link > a:hover { text-decoration: underline; text-underline-offset: 4px; }
+    #username { margin: 10% 0 0 0; }
+    #cards > div > p { display: flex; align-items: center; }
+    .main-link { position: fixed; display: flex; top: 20px; align-items: center; justify-content: space-between; width: 55%; background: #047a7e; padding: 15px 50px; border-radius: 125px; color: #fff; }
+  }
+</style>
+<div id="mainContent" style="display:none;">
+  <div class="header">
+    <h2 id="username"></h2>
+    <div id="slider-container">
+      <img id="slider-image" src="" />
+      <div id="dots" style="text-align:center;margin-top:5px;"></div>
+    </div>
+  </div>
+  <div id="cards"></div>
+  <div class="main-link">
+    <a onclick="reload">Home</a>
+    <a href="video.html">Shorts</a>
+    <a href="search.html">Search</a>
+    <a href="courses.html">Courses</a>
+    <a href="profile.html">Profile</a>
+  </div>
+  <div class="footer">
+      <a href="video.html" class="foot-item">
+        <i class="fa-solid fa-video"></i>
+      </a>
+      <a href="search.html" class="foot-item">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </a>
+      <a onclick="reload()" class="home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+      <a href="courses.html" class="foot-item">
+        <i class="fa-solid fa-book"></i>
+      </a>
+      <a href="profile.html" class="foot-item">
+        <i class="fa-solid fa-user"></i>
+      </a>
+  </div>
+  <a href="notification.html" class="bell">
+    <i class="fa-regular fa-bell"></i>
+  </a>
+</div>
+<div id="loader" style="display:flex;justify-content:center;align-items:center;"><div class="loader"></div></div>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').then(function() {
+      console.log("Service Worker Registered");
+    });
+  }
+</script>
+<script>
+  let deferredPrompt;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+
+    const installBtn = document.createElement("button");
+    installBtn.innerText = "Install DouchUp";
+    installBtn.style = "position: fixed; bottom: 10px; left: 10px; z-index: 999;";
+    document.body.appendChild(installBtn);
+
+    installBtn.addEventListener('click', () => {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(choiceResult => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('User accepted the A2HS prompt');
+        }
+        deferredPrompt = null;
+        installBtn.remove();
+      });
+    });
+  });
+</script>
+<script>
+  function reload(){
+    location.reload();
+  }
+
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbyDmpIYJZ1T9gzpUJzEOm1tXgYlan3HyeB4rCiuvRb9wQ7iyDLnvRAWlZry1UXcgGx3dA/exec';
+  const email = localStorage.getItem('c_local');
+  if (!email) window.location.href = "login.html";
+  
+  fetch(scriptURL + '?action=index&email=' + encodeURIComponent(email))
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById("loader").style.display = "none";
+      document.getElementById("mainContent").style.display = "block";
+  
+      document.getElementById("username").innerHTML = "<p>Growing Star, </p> <span>" + data.username + "</span>";
+  
+      let sliderIndex = 0;
+      const images = data.slider;
+      const sliderImage = document.getElementById("slider-image");
+      const dotsContainer = document.getElementById("dots");
+      dotsContainer.innerHTML = "";
+  
+      images.forEach((img, i) => {
+        const dot = document.createElement("span");
+        dot.style = "height:15px; width: 15px;margin:0 3px; display:inline-block; border-radius:50%; background:#5dc2b0;";
+        dotsContainer.appendChild(dot);
+      });
+  
+      const updateSlider = () => {
+        sliderImage.src = images[sliderIndex].img;
+        sliderImage.onclick = () => window.location.href = images[sliderIndex].url;
+        Array.from(dotsContainer.children).forEach((d, i) => {
+          d.style.background = i === sliderIndex ? "#5dc2b0" : "#0088cc";
+        });
+        sliderIndex = (sliderIndex + 1) % images.length;
+      };
+  
+      updateSlider();
+      setInterval(updateSlider, 3000);
+  
+      const cardsContainer = document.getElementById("cards");
+      const shuffled = data.info
+        .map(value => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value);
+  
+      const displayCards = shuffled.slice(0, 4);
+      cardsContainer.innerHTML = "";
+  
+      const titleDiv = document.createElement("div");
+      titleDiv.className = "text";
+      titleDiv.innerHTML = `<h3>Courses</h3><hr>`;
+      cardsContainer.appendChild(titleDiv);
+  
+      displayCards.forEach(item => {
+        const card = document.createElement("div");
+        card.innerHTML = `
+          <img src="${item.image}"/>
+          <h4>${item.title}</h4>
+          <p><span class="mob-price">Price &nbsp;₹${item.price}</span></p>
+        `;
+        card.onclick = () => {
+          localStorage.setItem('secret', item.key);
+          window.location.href = "main.html";
+        };
+        cardsContainer.appendChild(card);
+      });
+    });
+  </script>  

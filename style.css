@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=National+Park:wght@200..800&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+*{ padding: 0; margin: 0; overflow-x: hidden; }
+body { font-family: "Poppins", sans-serif; }
+button { cursor: pointer; }
+i { overflow: hidden; }
+a { text-decoration: none; cursor: pointer; }
+.input::placeholder ,button , a , input { font-family: "National Park", sans-serif; }
+.header { background: #073042; font-family: "Poppins", sans-serif; color: #fff; }
+.image { display: flex; align-items: center; justify-content: center; }
+.image > img { width: 220px; }
+.head > h3 , .head > h2 { color: #333; }
+.dont { position: fixed; bottom: 10px; right: 10px; text-align: right; }
+.dont > a { text-decoration: none; color: #000; font-weight: 700; font-size: 18px; }
+.dont > p { color: #898989; font-size: 16px; }
+.form { display: flex; flex-direction: column; padding: 18px 15px 15px 15px; gap: 15px; margin: -25px 0 0 0; background: #fff; border-radius: 25px; }
+.int { padding: 12px 15px; font-size: 14px; border-radius: 125px; border: none; background: #eee; outline: none; }
+.btn { padding: 12px; font-size: 14px; border-radius: 125px; border: none; background: #073042; color: #fff; font-weight: 800; }
+.text { display: flex; align-items: center; gap: 10px; padding: 10px 15px; }
+.text h3 { margin: 0; font-size: 24px; color: #073042; }
+.text hr { flex: 1; height: 4px; background: #073042; border: none; border-radius: 125px; }

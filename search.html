@@ -1,0 +1,84 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="loader.css">
+<style>
+  #noResults , #loader { display: none; }
+  .header { padding: 10px 10px 50px 10px; text-align: center; color: #fff; }
+  .bomb { margin: -20px 0 0 0; border-radius: 25px; background: #fff; padding: 10px 0 0 0; }
+  .int { margin: 10px; width: 93%; }
+  .card .title { font-size: 18px; margin: 10px 0 5px; font-weight: 700; text-shadow: 10px #333; color: #fff; margin: 10px 0 0 10px; }
+  .card .price { margin-bottom: 10px; font-size: 20px; text-shadow: 10px #333; font-weight: 800; color: #fff; margin: 5px 0 10px 10px; }
+  .card  img { box-shadow: #fff 0px 3px 12px; width: 100%; border-radius: 0 0 25px 25px; height: 180px; object-fit: cover; display: block; }
+  .card { width: calc(100% - 8px); background: #00496d; border-radius: 12px; overflow: hidden; box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 8px; cursor: pointer; transition: transform 0.2s ease; }
+  #results { display: flex; flex-wrap: wrap; gap: 16px; margin: 15px 0 0 0; align-items: center; justify-content: center; padding: 15px; }
+  #noResults { position: fixed; top: 50%; text-align: center; width: 100%; }
+  @media only screen and (min-width: 768px) {
+    body { margin: 0 20%; background: #073042; }
+    #noResults { width: 60%; color: #fff; }
+    .card  img { height: auto; }
+    .card { width: calc(48% - 8px); }
+    .card:hover { transform: scale(1.02); }
+    #loader { width: 60%; }
+  }
+</style>
+<div class="header">
+  <h2>Search Course</h2>
+</div>
+<div class="bomb">
+  <input type="text" id="searchBox" placeholder="Search..." class="int">
+  <div id="loader"><div class="loader"></div></div>
+  <div id="noResults">No Courses Available</div>
+  <div id="results"></div>
+</div>
+
+<script>
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbwRRzW4pPPPBLeulK2m9yxOj6MLsRvDs3YUwgLppEc00K5wY6poB2lXD7W9mTOV-oHhbg/exec';
+  let allCourses = [];
+
+  fetch(`${scriptURL}?action=info`)
+    .then(res => res.json())
+    .then(data => {
+      allCourses = data;
+    });
+
+  document.getElementById('searchBox').addEventListener('input', function () {
+    const keyword = this.value.toLowerCase();
+    const results = document.getElementById('results');
+    const loader = document.getElementById('loader');
+    const noResults = document.getElementById('noResults');
+    results.innerHTML = '';
+    noResults.style.display = 'none';
+    if (keyword.trim() === '') return;
+
+    loader.style.display = 'flex';
+    setTimeout(() => {
+      const filtered = allCourses.filter(course =>
+        course.title.toLowerCase().includes(keyword)
+      );
+      loader.style.display = 'none';
+
+      if (filtered.length === 0) {
+        noResults.style.display = 'block';
+      } else {
+        noResults.style.display = 'none';
+        filtered.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.onclick = () => {
+            localStorage.setItem('secret', item.key);
+            window.location.href = 'main.html';
+          };
+          card.innerHTML = `
+            <img src="${item.image}" alt="Course Image">
+            <div class="details">
+              <div class="title">${item.title}</div>
+              <div class="price">₹${item.price}</div>
+            </div>
+          `;
+          results.appendChild(card);
+        });
+      }
+    }, 300);
+  });
+</script>

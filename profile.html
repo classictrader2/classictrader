@@ -1,0 +1,54 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="loader.css">
+<script src="https://kit.fontawesome.com/8aa17a250d.js" crossorigin="anonymous"></script>
+<style>
+  .header { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 0; }
+  .header > img { width: 130px; border-radius: 125px; box-shadow: rgb(255, 255, 255) 0px 3px 8px; margin: 0 0 20px 0; }
+  .links { background: #fff; border-radius: 25px; margin: -25px 0 0 0; padding: 20px 15px; display: flex; flex-direction: column; gap: 10px; }
+  .links > a { cursor: pointer; padding: 8px; display: flex; align-items: center; gap: 10px; font-size: 24px; color: #333; font-weight: 500; }
+  hr { margin: 0 8px; }
+  @media only screen and (min-width: 768px) {
+    body { margin: 0 25%; background: #073042; }
+    #loader { width: 50%; top: 25%; }
+    .links { margin-bottom: 30px; }
+  }
+</style>
+<div id="loader" style="display: flex;"><div class="loader"></div></div>
+<div id="profile" style="display:none;"></div>
+
+<script>
+  const email = localStorage.getItem('c_local');
+  if (!email) {
+    window.location.href = 'login.html';
+  } else {
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzAYF-JDHmZVy9q4Os6ByeJiNic9Y6e9qU2TQK_ld4nGmEGX9wcDznG8IX_pBwSR14_lQ/exec';
+    fetch(`${scriptURL}?action=getUser&email=${encodeURIComponent(email)}`)
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('loader').style.display = 'none';
+        document.getElementById('profile').style.display = 'block';
+        document.getElementById('profile').innerHTML = `
+        <div class="header">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPKARlAAjn5EY3jTvOVkMO2WFqRZCu9MCX8U-ZG0xgN0luwtlldK83eVV4B_sOy_W37xg&usqp=CAU" alt="User Image">
+          <h2>Skill Banao,</h2>
+          <h3>${data.name}</h3>
+        </div>
+        <div class="links">
+          <a href="index.html"><i class="fa-solid fa-house"></i> Home</a><hr>
+          <a href="courses.html"><i class="fa-solid fa-book"></i> Courses</a><hr>
+          <a href="history.html"><i class="fa-solid fa-bookmark"></i> My Courses</a><hr>
+          <a href="video.html"><i class="fa-solid fa-video"></i> Shorts</a><hr>
+          <a href="notification.html"><i class="fa-solid fa-bell"></i> Alert</a><hr>
+          <a onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</a><hr>
+        </div>
+        `;
+      });
+  }
+
+  function logout() {
+    localStorage.removeItem('c_local');
+    window.location.href = 'login.html';
+  }
+</script>
