@@ -97,29 +97,6 @@
   }
 </script>
 <script>
-  let deferredPrompt;
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-
-    const installBtn = document.createElement("button");
-    installBtn.innerText = "Install DouchUp";
-    installBtn.style = "position: fixed; bottom: 10px; left: 10px; z-index: 999;";
-    document.body.appendChild(installBtn);
-
-    installBtn.addEventListener('click', () => {
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then(choiceResult => {
-        if (choiceResult.outcome === 'accepted') {
-          console.log('User accepted the A2HS prompt');
-        }
-        deferredPrompt = null;
-        installBtn.remove();
-      });
-    });
-  });
-</script>
-<script>
   function reload(){
     location.reload();
   }
