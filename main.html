@@ -35,23 +35,24 @@
 <script>
   const scriptURL = 'https://script.google.com/macros/s/AKfycbzQIqwFGjE--_pk6fOyfJ7ksqtpfTRrJylMb6iSffxWylj2QI1oXXVyW7qCqZxQ_VeP/exec';
   const key = localStorage.getItem('secret');
-  const email = localStorage.getItem('c_local');
-  if (!key || !email) window.location.href = 'index.html';
-
+  const email = localStorage.getItem('c_local') || "";
+  
+  if (!key) window.location.href = 'index.html';
+  
   function showAbout() {
     document.getElementById('aboutDiv').style.display = 'block';
     document.getElementById('descriptionDiv').style.display = 'none';
     document.getElementById('aboutBtn').classList.add('active');
     document.getElementById('descBtn').classList.remove('active');
   }
-
+  
   function showDescription() {
     document.getElementById('aboutDiv').style.display = 'none';
     document.getElementById('descriptionDiv').style.display = 'block';
     document.getElementById('descBtn').classList.add('active');
     document.getElementById('aboutBtn').classList.remove('active');
   }
-
+  
   fetch(`${scriptURL}?action=main&key=${encodeURIComponent(key)}&email=${encodeURIComponent(email)}`)
     .then(res => res.json())
     .then(data => {
@@ -68,11 +69,23 @@
       document.getElementById('descriptionDiv').innerHTML = `<h3>Description</h3><span class="tought">${data.description}</span>`;
       document.getElementById('title').innerText = data.title;
       document.getElementById('price').innerText = `At Just ₹${data.price}`;
-
+  
       const actions = document.getElementById('actions');
       const btn = document.createElement('button');
-      btn.textContent = data.ownsCourse ? '👀 Watch' : '🛍️ Grab Now';
-      btn.onclick = () => window.location.href = data.ownsCourse ? 'view.html' : 'buy.html';
+  
+      if (localStorage.getItem('c_local')) {
+        btn.textContent = data.ownsCourse ? '👀 Watch' : '🛍️ Grab Now';
+        btn.onclick = () => {
+          window.location.href = data.ownsCourse ? 'view.html' : 'buy.html';
+        };
+      } else {
+        btn.textContent = '🛍️ Grab Now';
+        btn.onclick = () => {
+          window.location.href = 'login.html';
+        };
+      }
+  
       actions.appendChild(btn);
     });
-</script>
+  </script>
+  
