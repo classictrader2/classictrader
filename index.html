@@ -100,10 +100,9 @@
   function reload(){
     location.reload();
   }
-
+  
   const scriptURL = 'https://script.google.com/macros/s/AKfycbyDmpIYJZ1T9gzpUJzEOm1tXgYlan3HyeB4rCiuvRb9wQ7iyDLnvRAWlZry1UXcgGx3dA/exec';
-  const email = localStorage.getItem('c_local');
-  if (!email) window.location.href = "login.html";
+  const email = localStorage.getItem('c_local') || "guest@guest.com";
   
   fetch(scriptURL + '?action=index&email=' + encodeURIComponent(email))
     .then(res => res.json())
@@ -111,7 +110,8 @@
       document.getElementById("loader").style.display = "none";
       document.getElementById("mainContent").style.display = "block";
   
-      document.getElementById("username").innerHTML = "<p>Growing Star, </p> <span>" + data.username + "</span>";
+      const username = (email === "guest@guest.com") ? "Guest" : data.username;
+      document.getElementById("username").innerHTML = "<p>Growing Star, </p> <span>" + username + "</span>";
   
       let sliderIndex = 0;
       const images = data.slider;
@@ -165,4 +165,4 @@
         cardsContainer.appendChild(card);
       });
     });
-  </script>  
+</script>  
